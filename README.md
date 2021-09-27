@@ -11,13 +11,14 @@ The app should be able to create, update, delete logs, store data in a database,
 #### 1. Logs
 
 The user should be able to 
-- [ ] create an expense log with
+- [x] create an expense log with
     - value
     - date
     - description
 - [ ] delete a log
 - [ ] update log
-- [ ] see a list of logs saved locally
+- [x] see a list of logs segmented by day 
+- [ ] access persistent data stored locally
 
 #### 2. Categories
 
