@@ -1,108 +1,63 @@
-<script setup lang="ts">
-import { reactive, computed } from 'vue'
-import day from 'dayjs'
-import customParseFormat from 'dayjs/plugin/customParseFormat'
-import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
-import { ILog } from './interfaces/ILog'
-import { logList } from './mocks/logs'
-
-day.extend(customParseFormat)
-day.extend(isSameOrBefore)
-
-const logs = reactive(logList)
-
-const logSegments = computed(() => {
-  const dates = logs.reduce((acc, log) => {
-    if (!acc.includes(log.dateOfTransaction)) acc.push(log.dateOfTransaction)
-    return acc
-  }, [] as string[])
-
-  return dates
-    .map(dateSegment => {
-      const dateLogs = logs.filter(log => log.dateOfTransaction === dateSegment)
-      return {
-        dateSegment,
-        dateLogs
-      }
-    })
-    .sort((a, b) => {
-      return day(a.dateSegment, "DD/MM/YYYY").isSameOrBefore(day(b.dateSegment, "DD/MM/YYYY")) ? 1 : -1
-    })
-})
-
-
-
-const newLog = reactive({
-  description: '',
-  value: '',
-  dateOfTransaction: '',
-})
-
-function addLog() {
-  if (Object.values(newLog).every(val => val)) {
-
-    const tempLog: ILog = {
-      ...newLog,
-      value: +newLog.value
-    }
-
-    logs.push(tempLog)
-    resetForm()
-  }
-}
-
-function resetForm() {
-  newLog.description = ''
-  newLog.value = ''
-  newLog.dateOfTransaction = ''
-}
-
-</script>
-
 <template>
   <h1>Monten</h1>
-
-  <form @submit.prevent="addLog">
-    <h4>New Log</h4>
-    <label for="logDescription">
-      <p>Description</p>
-      <input id="logDescription" type="text" v-model="newLog.description" />
-    </label>
-    <br />
-    <label for="logValue">
-      <p>Value</p>
-      <input id="logValue" type="text" v-model="newLog.value" />
-    </label>
-    <br />
-    <label for="logDate">
-      <p>Date</p>
-      <input id="logDate" type="text" v-model="newLog.dateOfTransaction" />
-    </label>
-    <br />
-    <input type="submit" value="add log" />
-  </form>
-
-  <ul>
-    <li v-for="(segment, i) of logSegments" :key="i">
-      <h4>{{ segment.dateSegment }}</h4>
-      <ul>
-        <li v-for="(log, i) of segment.dateLogs" :key="i">
-          <span>{{ log.description + " " }}</span>
-          <span>{{ log.value }}</span>
-        </li>
-      </ul>
-    </li>
-  </ul>
+  <router-view></router-view>
 </template>
 
-<style lang="scss">
-  form {
-    display: flex;
-    flex-wrap: wrap;
-    
-    &>* {
-      flex-grow: 1;
-      
-    }
-  }
+<style>
+:root {
+  font-size: 62.5%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+h1,
+.headline1 {
+  font-size: 3.247em;
+}
+
+h2,
+.headline2 {
+  font-size: 2.887em;
+}
+
+h3,
+.headline3 {
+  font-size: 2.566em;
+}
+
+h4,
+.headline4 {
+  font-size: 2.281em;
+}
+
+h5,
+.headline5 {
+  font-size: 2.027em;
+}
+
+h6,
+.headline6 {
+  font-size: 1.802em;
+}
+
+p {
+  font-size: 1.602em;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+span {
+  font-size: inherit;
+}
 </style>
